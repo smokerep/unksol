@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { getDownloads, type Downloads } from '../lib/api';
-import { loadToken, clearToken, requestSignIn } from '../lib/auth';
+import { loadToken, clearToken, requestSignIn, savedWallet } from '../lib/auth';
 
 const PLATFORMS: { key: keyof Downloads; label: string; sub: string }[] = [
   { key: 'mac', label: 'macOS', sub: 'Apple silicon / Intel · .dmg' },
@@ -26,6 +26,21 @@ export default function DownloadApp() {
     if (t) void load(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // If a different wallet connects, the persisted session is not theirs: drop it.
+  const walletKey = publicKey?.toBase58() ?? null;
+  useEffect(() => {
+    if (!walletKey) return;
+    const saved = savedWallet();
+    if (saved && saved !== walletKey) {
+      clearToken();
+      setToken(null);
+      setDl(null);
+      setEligible(null);
+      setError(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [walletKey]);
 
   async function load(tok: string) {
     setBusy(true);
@@ -86,15 +101,33 @@ export default function DownloadApp() {
           <div className="terminal-actions">
             <WalletMultiButton />
             {connected && (
-              <button className="btn primary" disabled={busy} onClick={signIn}>
+              <button className="btn primary" disabled={busy || !signMessage} onClick={signIn}>
                 {busy ? 'signing…' : '[ sign in ]'}
               </button>
+            )}
+            {connected && !signMessage && (
+              <p className="line warn">! this wallet cannot sign messages — use Phantom or Solflare</p>
             )}
           </div>
           {error && <p className="line err">✘ {error}</p>}
         </div>
       </div>
     );
+  }
+
+  // Signed in: surface fetch problems instead of silently showing nothing.
+  if (error) {
+    return (
+      <div className="dl-notice">
+        <p className="line err">✘ {error}</p>
+        <button className="btn" onClick={() => token && load(token)}>
+          retry
+        </button>
+      </div>
+    );
+  }
+  if (busy && !dl) {
+    return <p className="muted">checking eligibility…</p>;
   }
 
   // Signed in but not a holder.

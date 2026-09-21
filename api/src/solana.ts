@@ -48,8 +48,10 @@ export async function checkEligibility(wallet: string): Promise<Eligibility> {
     return { eligible: false, balance: 0, required, reason: 'token-not-configured' };
   }
 
-  const { amount } = await getTokenBalance(wallet, config.tokenMint);
-  return { eligible: amount >= required, balance: amount, required };
+  const { amount, decimals, raw } = await getTokenBalance(wallet, config.tokenMint);
+  // Integer math: float sums of uiAmount drift on large multi-account balances.
+  const eligible = BigInt(raw) >= BigInt(Math.round(required)) * 10n ** BigInt(decimals);
+  return { eligible, balance: amount, required };
 }
 
 // Short-lived cache so high-frequency endpoints (e.g. search) don't hit the RPC

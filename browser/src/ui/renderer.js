@@ -244,9 +244,9 @@ vpnBtn.addEventListener('click', async () => {
   try {
     const res = await window.unk.toggleVpn(!vpnOn, vpnRegion);
     vpnOn = res.on;
-    vpnRegion = res.region;
+    if (res.region) vpnRegion = res.region;
   } catch {
-    vpnOn = !vpnOn;
+    vpnOn = false; // fail safe: never pretend the tunnel is up
   }
   renderVpn();
 });

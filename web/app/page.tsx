@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import BackgroundFX from '../components/BackgroundFX';
 import AccessPanel from '../components/AccessPanel';
 import Socials from '../components/Socials';
 
@@ -85,7 +84,7 @@ const FEATURES = [
 ];
 
 const STEPS = [
-  { n: '01', t: 'Connect your wallet', d: 'Phantom, Solflare or Backpack. One click.' },
+  { n: '01', t: 'Connect your wallet', d: 'Phantom or Solflare. One click.' },
   { n: '02', t: 'Sign', d: 'A message proving the wallet is yours. Free, zero gas.' },
   { n: '03', t: 'Hold $UNK', d: 'As long as you stay above the threshold, the layer is yours.' },
   { n: '04', t: 'Disappear', d: 'Pick an exit country and step behind the layer.' },
@@ -94,8 +93,6 @@ const STEPS = [
 export default function Home() {
   return (
     <>
-      <BackgroundFX />
-
       <header className="nav">
         <a className="brand" href="#top">
           <img src="/brand/logo.png" alt="unk" className="brand-logo-img" />
@@ -141,7 +138,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="hero-globe hero-keyhole" aria-hidden="true">
+          <div className="art-band hero-keyhole" aria-hidden="true">
             <div className="keyhole-img" />
             <div className="keyhole-glow" />
             <div className="keyhole-pulse" />
@@ -166,7 +163,7 @@ export default function Home() {
         {/* PRODUCTS */}
         <section id="products" className="products">
           <p className="section-label">// the layer</p>
-          <h2 className="section-title">One token. A whole layer of privacy.</h2>
+          <h2 className="section-title">Four products. One layer.</h2>
           <div className="product-grid">
             {PRODUCTS.map((p) =>
               p.href.startsWith('/') ? (
@@ -355,9 +352,6 @@ export default function Home() {
       </main>
 
       <footer className="footer">
-        <div className="footer-rule">
-          {'// ──────────────────────────────────────────────────────────────'}
-        </div>
         <div className="footer-grid">
           <div className="f-col f-brand">
             <span className="brand">

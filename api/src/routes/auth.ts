@@ -12,37 +12,44 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
   app.post('/auth/nonce', async (req) => {
     const { wallet } = z.object({ wallet: walletSchema }).parse(req.body);
 
+    // Opportunistic cleanup so expired nonces don't pile up forever.
+    await prisma.authNonce.deleteMany({ where: { expiresAt: { lt: new Date() } } });
+
     const nonce = randomBytes(16).toString('hex');
-    const issuedAt = new Date().toISOString();
+    const issuedAt = new Date();
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
-    await prisma.authNonce.create({ data: { wallet, nonce, expiresAt } });
+    await prisma.authNonce.create({ data: { wallet, nonce, issuedAt, expiresAt } });
 
-    return { message: buildSignInMessage(wallet, nonce, issuedAt), nonce };
+    return { message: buildSignInMessage(wallet, nonce, issuedAt.toISOString()), nonce };
   });
 
   // 2) The client sends the signed message; we verify it and issue a session (JWT).
   app.post('/auth/verify', async (req, reply) => {
     const { wallet, message, signature } = z
-      .object({ wallet: walletSchema, message: z.string(), signature: z.string() })
+      .object({ wallet: walletSchema, message: z.string().max(2000), signature: z.string().max(500) })
       .parse(req.body);
 
-    const match = message.match(/Nonce: ([a-f0-9]+)/);
-    if (!match) return reply.code(400).send({ error: 'no-nonce-in-message' });
-
-    const record = await prisma.authNonce.findFirst({
-      where: { wallet, nonce: match[1] },
+    // The signature must cover EXACTLY the message this server issued for this
+    // wallet — never a look-alike signed elsewhere that merely embeds a valid
+    // nonce somewhere in its text.
+    const candidates = await prisma.authNonce.findMany({
+      where: { wallet, expiresAt: { gte: new Date() } },
     });
-    if (!record || record.expiresAt < new Date()) {
-      return reply.code(401).send({ error: 'nonce-invalid-or-expired' });
-    }
+    const record = candidates.find(
+      (c) => message === buildSignInMessage(wallet, c.nonce, c.issuedAt.toISOString()),
+    );
+    if (!record) return reply.code(401).send({ error: 'nonce-invalid-or-expired' });
 
     if (!verifySignature(message, signature, wallet)) {
       return reply.code(401).send({ error: 'bad-signature' });
     }
 
-    // One-time nonce: remove every nonce for this wallet.
+    // Atomic one-time consumption: of N concurrent replays, exactly one wins.
+    const consumed = await prisma.authNonce.deleteMany({ where: { id: record.id } });
+    if (consumed.count !== 1) return reply.code(401).send({ error: 'nonce-invalid-or-expired' });
     await prisma.authNonce.deleteMany({ where: { wallet } });
+
     await prisma.user.upsert({ where: { wallet }, update: {}, create: { wallet } });
 
     const token = await reply.jwtSign({ wallet });

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { search as apiSearch, type SearchResponse, type SearchCategory } from '../lib/api';
 
 const CATEGORIES: { key: SearchCategory; label: string }[] = [
@@ -30,6 +30,8 @@ export default function SearchApp() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [shortcut, setShortcut] = useState<Shortcut>(null);
+  const [resCategory, setResCategory] = useState<SearchCategory>('general');
+  const seqRef = useRef(0);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -46,18 +48,22 @@ export default function SearchApp() {
   async function run(query: string, cat: SearchCategory) {
     const trimmed = query.trim();
     if (!trimmed) return;
+    const seq = ++seqRef.current; // stale responses must never win over newer ones
     setBusy(true);
     setError(null);
     setShortcut(detectShortcut(trimmed));
     try {
       const r = await apiSearch(trimmed, cat);
+      if (seq !== seqRef.current) return;
       setRes(r);
+      setResCategory(cat);
       const url = `?q=${encodeURIComponent(trimmed)}&category=${cat}`;
       window.history.replaceState(null, '', url);
     } catch (e) {
+      if (seq !== seqRef.current) return;
       setError(e instanceof Error ? e.message : 'Search error');
     } finally {
-      setBusy(false);
+      if (seq === seqRef.current) setBusy(false);
     }
   }
 
@@ -136,7 +142,7 @@ export default function SearchApp() {
         {res.results.length} results · source: {res.source}
       </p>
 
-      {category === 'images' ? (
+      {resCategory === 'images' ? (
         <div className="image-grid">
           {res.results
             .filter((r) => r.img)

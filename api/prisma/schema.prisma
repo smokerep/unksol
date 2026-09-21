@@ -15,11 +15,13 @@ model User {
   peers     VpnPeer[]
 }
 
-// One-time nonce for wallet sign-in (SIWE, anti-replay).
+// One-time nonce for wallet sign-in (SIWS, anti-replay). issuedAt is stored so
+// /auth/verify can rebuild the EXACT server-issued message and require equality.
 model AuthNonce {
   id        String   @id @default(cuid())
   wallet    String
   nonce     String
+  issuedAt  DateTime @default(now())
   expiresAt DateTime
   createdAt DateTime @default(now())
 

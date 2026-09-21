@@ -134,10 +134,23 @@ app.on('window-all-closed', () => {
 });
 
 // Supply the proxy credentials when the VPN proxy asks for authentication.
+// Only while the VPN is ON — never hand the shared credentials to arbitrary
+// proxies when we are routing direct.
 app.on('login', (event, _webContents, _request, authInfo, callback) => {
-  if (authInfo && authInfo.isProxy) {
+  if (vpnOn && authInfo && authInfo.isProxy) {
     event.preventDefault();
     callback(VPN_USER, VPN_PASS);
+  }
+});
+
+// <webview> pages must not spawn free-floating windows: open target=_blank
+// links in the same view instead of silently dropping (or popping) them.
+app.on('web-contents-created', (_event, contents) => {
+  if (contents.getType() === 'webview') {
+    contents.setWindowOpenHandler(({ url }) => {
+      if (/^https?:\/\//i.test(url)) contents.loadURL(url);
+      return { action: 'deny' };
+    });
   }
 });
 
@@ -155,10 +168,16 @@ ipcMain.handle('privacy:toggleBlocker', (_event, on) => {
 ipcMain.handle('vpn:regions', () => publicRegions());
 
 ipcMain.handle('vpn:toggle', async (_event, on, regionId) => {
-  vpnOn = Boolean(on);
+  const ses = session.defaultSession;
   if (regionId && VPN_REGIONS.some((r) => r.id === regionId)) vpnRegion = regionId;
   const region = VPN_REGIONS.find((r) => r.id === vpnRegion) || VPN_REGIONS[0];
-  const ses = session.defaultSession;
+  // No exit nodes yet (empty list / API unreachable): stay safely OFF.
+  if (!region || !region.proxy) {
+    vpnOn = false;
+    await ses.setProxy({ mode: 'direct' });
+    return { on: false, region: null, error: 'no-regions' };
+  }
+  vpnOn = Boolean(on);
   // Route (or stop routing) the whole app — including every tab's <webview> —
   // through the chosen region's node. Your browsing exits from that node's IP.
   if (vpnOn) {

@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import BackgroundFX from '../../components/BackgroundFX';
 import DownloadApp from '../../components/DownloadApp';
 import Socials from '../../components/Socials';
 
@@ -12,8 +11,6 @@ export const metadata: Metadata = {
 export default function DownloadPage() {
   return (
     <>
-      <BackgroundFX bg="bg3" />
-
       <header className="nav">
         <Link className="brand" href="/">
           <img src="/brand/logo.png" alt="unk" className="brand-logo-img" />

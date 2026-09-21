@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import BackgroundFX from '../../components/BackgroundFX';
 import Socials from '../../components/Socials';
 
 export const metadata: Metadata = {
@@ -11,8 +10,6 @@ export const metadata: Metadata = {
 export default function SwapPage() {
   return (
     <>
-      <BackgroundFX bg="bg2" />
-
       <header className="nav">
         <Link className="brand" href="/">
           <img src="/brand/logo.png" alt="unk" className="brand-logo-img" />

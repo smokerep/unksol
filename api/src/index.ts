@@ -1,4 +1,5 @@
 import Fastify from 'fastify';
+import { ZodError } from 'zod';
 import cors from '@fastify/cors';
 import jwt from '@fastify/jwt';
 import { config } from './config';
@@ -10,6 +11,10 @@ import { downloadRoutes } from './routes/download';
 import { startReverifyWorker } from './worker/reverify';
 
 async function main(): Promise<void> {
+  if (config.nodeEnv === 'production' && !process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET must be set in production');
+  }
+
   const app = Fastify({ logger: true });
 
   // Accept body-less POSTs even when content-type is application/json
@@ -19,8 +24,19 @@ async function main(): Promise<void> {
     try {
       done(null, JSON.parse(body as string));
     } catch (err) {
+      (err as { statusCode?: number }).statusCode = 400;
       done(err as Error);
     }
+  });
+
+  // Validation errors are the client's fault: answer 400, not a leaky 500.
+  app.setErrorHandler((err, req, reply) => {
+    if (err instanceof ZodError) {
+      return reply.code(400).send({ error: 'bad-request', issues: err.issues.map((i) => i.message) });
+    }
+    const status = (err as { statusCode?: number }).statusCode ?? 500;
+    if (status >= 500) req.log.error(err);
+    return reply.code(status).send({ error: status >= 500 ? 'internal-error' : err.message });
   });
 
   // A lone "*" in CORS_ORIGIN means "allow any origin" (handy for early testing).

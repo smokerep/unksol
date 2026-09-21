@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { status, provision, type AccessStatus } from '../lib/api';
@@ -14,6 +14,16 @@ export default function AccessPanel() {
   const [region, setRegion] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // A wallet switch (or disconnect) must never show the previous wallet's session.
+  const walletKey = publicKey?.toBase58() ?? null;
+  useEffect(() => {
+    setToken(null);
+    setInfo(null);
+    setConfig(null);
+    setRegion('');
+    setError(null);
+  }, [walletKey]);
 
   async function signIn() {
     if (!publicKey || !signMessage) return;
@@ -85,11 +95,15 @@ export default function AccessPanel() {
         <div className="terminal-actions">
           <WalletMultiButton />
           {connected && !token && (
-            <button className="btn" disabled={busy} onClick={signIn}>
+            <button className="btn" disabled={busy || !signMessage} onClick={signIn}>
               {busy ? 'signing…' : '[ sign in ]'}
             </button>
           )}
         </div>
+
+        {connected && !signMessage && (
+          <p className="line warn">! this wallet cannot sign messages — use Phantom or Solflare</p>
+        )}
 
         {info && (
           <div className="readout">

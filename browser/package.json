@@ -7,7 +7,7 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "build:swap": "esbuild src/swap/swap-app.js --bundle --format=iife --outfile=src/ui/swap.bundle.js --minify",
+    "build:swap": "echo swap-ui-parked: returns with the Jupiter port (see web/lib/swap.ts)",
     "dist": "electron-builder",
     "dist:mac": "electron-builder --mac",
     "dist:win": "electron-builder --win",

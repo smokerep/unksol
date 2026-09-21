@@ -38,7 +38,7 @@ function assertWgKey(key: string): void {
 export async function allocateAddress(region: Region): Promise<string> {
   const base = region.clientSubnet.split('/')[0].split('.').slice(0, 3).join('.'); // e.g. "10.8.0"
   const peers = await prisma.vpnPeer.findMany({
-    where: { region: region.id },
+    where: { region: region.id, active: true },
     select: { address: true },
   });
   const used = new Set(peers.map((p) => p.address.split('/')[0]));

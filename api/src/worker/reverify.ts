@@ -2,7 +2,7 @@ import cron from 'node-cron';
 import { prisma } from '../db';
 import { checkEligibility } from '../solana';
 import { providerForRegion } from '../wireguard';
-import { getRegion, defaultRegion } from '../regions';
+import { getRegion } from '../regions';
 import { config } from '../config';
 
 /**
@@ -21,9 +21,22 @@ export function startReverifyWorker(): void {
       try {
         const elig = await checkEligibility(peer.user.wallet);
         if (!elig.eligible) {
-          const region = getRegion(peer.region) ?? defaultRegion();
-          await providerForRegion(region).removePeer(peer.publicKey).catch(() => {});
-          await prisma.vpnPeer.update({ where: { id: peer.id }, data: { active: false } });
+          const region = getRegion(peer.region);
+          if (!region) {
+            console.warn(`[reverify] region ${peer.region} gone — skipping ${peer.user.wallet}`);
+            continue;
+          }
+          try {
+            await providerForRegion(region).removePeer(peer.publicKey);
+          } catch (e) {
+            // Fail CLOSED: leave the peer active so the next run retries.
+            console.error(`[reverify] removePeer failed for ${peer.user.wallet}, will retry`, e);
+            continue;
+          }
+          await prisma.vpnPeer.update({
+            where: { id: peer.id },
+            data: { active: false, address: `freed:${peer.id}` },
+          });
           console.log(
             `[reverify] revoked ${peer.user.wallet} (balance ${elig.balance} < ${elig.required})`,
           );
