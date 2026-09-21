@@ -1,0 +1,30 @@
+# Postgres for production. In local dev the backend uses SQLite (zero setup).
+# Start: docker compose up -d
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: unk
+      POSTGRES_PASSWORD: unk
+      POSTGRES_DB: unk
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # Privacy meta-search engine behind unk Search.
+  # Set SEARXNG_URL=http://localhost:8080 in api/.env, and enable the JSON API
+  # (search.formats: [html, json]) in infra/searxng/settings.yml — see infra/README.md.
+  searxng:
+    image: searxng/searxng:latest
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - SEARXNG_BASE_URL=http://localhost:8080/
+    volumes:
+      - ./infra/searxng:/etc/searxng
+
+volumes:
+  pgdata:

@@ -1,0 +1,16 @@
+[Unit]
+Description=unk region agent (WireGuard peer control)
+After=network-online.target wg-quick@wg0.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=/opt/unk-node/agent.env
+ExecStart=/usr/bin/node /opt/unk-node/agent.mjs
+Restart=always
+RestartSec=3
+# The agent shells out to `wg`, which needs privilege.
+User=root
+
+[Install]
+WantedBy=multi-user.target

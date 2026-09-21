@@ -1,0 +1,15 @@
+# The Next.js app lives in the web/ subfolder and is exported as a static site.
+# base = web    -> Netlify cd's into web/ to install and run the build
+# publish = out -> publishes web/out (path relative to base)
+[build]
+  base = "web"
+  command = "npm run build"
+  publish = "out"
+
+[build.environment]
+  # Node 20: transitive wallet deps (@solana/* via WalletConnect) require >=20.18.
+  NODE_VERSION = "20"
+
+# NOTE: when the anons custom domain is wired, add a forced redirect here from
+# the *.netlify.app build URL to the canonical domain (see git history for the
+# pattern used on the previous deployment).

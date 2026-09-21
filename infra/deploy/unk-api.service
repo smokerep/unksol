@@ -1,0 +1,17 @@
+[Unit]
+Description=unk API
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/unk/api
+ExecStart=/usr/bin/npm start
+Restart=always
+RestartSec=3
+Environment=NODE_ENV=production
+# Runs as root so it can manage WireGuard when WIREGUARD_PROVIDER=local.
+# For an API-only (no-VPN) box you can switch this to a dedicated unprivileged user.
+User=root
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- unk — hooded figure mark. Solana gradient hood, face left in shadow. -->
+  <defs>
+    <linearGradient id="unkg" x1="0" y1="512" x2="512" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9945FF"/>
+      <stop offset="1" stop-color="#14F195"/>
+    </linearGradient>
+    <radialGradient id="haze" cx="50%" cy="46%" r="60%">
+      <stop offset="0%" stop-color="#14F195" stop-opacity="0.16"/>
+      <stop offset="55%" stop-color="#9945FF" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="#9945FF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="#000000"/>
+  <rect width="512" height="512" rx="116" fill="url(#haze)"/>
+  <!-- glow echo of the silhouette -->
+  <path d="M92 432
+           C94 378 124 350 168 338
+           C150 240 184 146 256 138
+           C328 146 362 240 344 338
+           C388 350 418 378 420 432
+           Z"
+        fill="none" stroke="#14F195" stroke-width="30" stroke-linejoin="round" opacity="0.10"/>
+  <path d="M92 432
+           C94 378 124 350 168 338
+           C150 240 184 146 256 138
+           C328 146 362 240 344 338
+           C388 350 418 378 420 432
+           Z"
+        fill="none" stroke="#9945FF" stroke-width="14" stroke-linejoin="round" opacity="0.28"/>
+  <!-- hooded bust, Solana gradient -->
+  <path d="M92 432
+           C94 378 124 350 168 338
+           C150 240 184 146 256 138
+           C328 146 362 240 344 338
+           C388 350 418 378 420 432
+           Z"
+        fill="url(#unkg)"/>
+  <!-- face void -->
+  <ellipse cx="256" cy="262" rx="55" ry="70" fill="#000000"/>
+  <!-- neckline notch -->
+  <path d="M228 432 L256 372 L284 432 Z" fill="#000000"/>
+</svg>

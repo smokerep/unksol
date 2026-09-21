@@ -1,0 +1,47 @@
+// Dev: SQLite (zero setup). Prod: change the provider to "postgresql" and update DATABASE_URL.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  wallet    String    @unique
+  createdAt DateTime  @default(now())
+  peers     VpnPeer[]
+}
+
+// One-time nonce for wallet sign-in (SIWE, anti-replay).
+model AuthNonce {
+  id        String   @id @default(cuid())
+  wallet    String
+  nonce     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([wallet])
+}
+
+model VpnPeer {
+  id        String @id @default(cuid())
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  publicKey  String  @unique
+  // NB: in this MVP we store the private key so we can re-display the config.
+  // See the security notes in the README (future: client-side key generation).
+  privateKey String
+  address    String  @unique // client IP, e.g. "10.8.0.2/32" (unique per-region subnet)
+  active     Boolean @default(true)
+  region     String  @default("de") // which VPN exit node this peer lives on
+
+  lastVerifiedAt DateTime @default(now())
+  createdAt      DateTime @default(now())
+
+  @@index([userId])
+  @@index([region])
+}
