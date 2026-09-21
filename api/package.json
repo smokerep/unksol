@@ -9,7 +9,9 @@
     "smoke": "tsx scripts/smoke.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "postinstall": "prisma generate",
+    "start:railway": "prisma db push --skip-generate && tsx src/index.ts"
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",

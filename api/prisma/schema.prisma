@@ -1,10 +1,10 @@
-// Dev: SQLite (zero setup). Prod: change the provider to "postgresql" and update DATABASE_URL.
+// Postgres (Railway/managed). Local dev: use docker-compose Postgres for DATABASE_URL.
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
