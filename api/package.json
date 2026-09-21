@@ -4,14 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "start": "tsx src/index.ts",
+    "start": "prisma db push --skip-generate && tsx src/index.ts",
     "typecheck": "tsc --noEmit",
     "smoke": "tsx scripts/smoke.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
-    "postinstall": "prisma generate",
-    "start:railway": "prisma db push --skip-generate && tsx src/index.ts"
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",
