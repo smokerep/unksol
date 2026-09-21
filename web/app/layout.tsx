@@ -5,11 +5,11 @@ import { Providers } from './providers';
 export const metadata: Metadata = {
   title: 'unk — the private layer of Solana',
   description:
-    'An anonymous exit network in 10 countries, private search, an anonymous browser and private swaps — gated by $UNK on Solana. Hold the token, own the layer.',
+    'An anonymous exit network, private search, an anonymous browser and private swaps — gated by $UNK on Solana. Hold the token, own the layer.',
 };
 
 export const viewport: Viewport = {
-  themeColor: '#06070a',
+  themeColor: '#ffffff',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

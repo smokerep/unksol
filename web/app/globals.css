@@ -1,20 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 :root {
-  --bg: #06070a;
-  --bg-2: #0a0c11;
-  --panel: rgba(255, 255, 255, 0.02);
-  --line: rgba(255, 255, 255, 0.1);
-  --line-soft: rgba(255, 255, 255, 0.06);
-  --text: #e9ebf2;
-  --muted: #767c8c;
+  /* Light theme — white surface, Solana purple/green accents. */
+  --bg: #ffffff;
+  --bg-2: #f6f7f9;
+  --panel: #ffffff;
+  --line: rgba(11, 13, 18, 0.16);
+  --line-soft: rgba(11, 13, 18, 0.08);
+  --text: #0b0d12;
+  --muted: #5c6470;
   --white: #ffffff;
-  /* unk brand lime (sampled from the official graphics pack). */
+  --ink: #0b0d12;
+  /* Solana palette. --accent is bright (fills, dark surfaces); --accent-ink is
+     a darker green readable as TEXT on white; --accent-2 is the purple. */
   --accent: #14F195;
+  --accent-ink: #0a9e66;
   --green: #14F195;
   --accent-2: #9945FF;
-  --red: #ff6b6b;
+  --red: #d64545;
   --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* Dark card (terminal / hero art) internals. */
+  --dark: #07080c;
+  --dark-2: #0b0d13;
+  --dark-line: rgba(255, 255, 255, 0.12);
+  --dark-line-soft: rgba(255, 255, 255, 0.07);
+  --dark-text: #e9ebf2;
+  --dark-muted: #8b93a1;
 }
 
 * {
@@ -30,7 +41,8 @@ html {
 body {
   margin: 0;
   background:
-    radial-gradient(1100px 620px at 50% -8%, #10131c 0%, rgba(16, 19, 28, 0) 60%),
+    radial-gradient(900px 460px at 12% -6%, rgba(153, 69, 255, 0.07), transparent 62%),
+    radial-gradient(900px 480px at 88% -4%, rgba(20, 241, 149, 0.09), transparent 60%),
     var(--bg);
   color: var(--text);
   font-family: var(--mono);
@@ -41,8 +53,7 @@ body {
 }
 
 ::selection {
-  background: rgba(20, 241, 149, 0.28);
-  color: #fff;
+  background: rgba(153, 69, 255, 0.22);
 }
 
 a {
@@ -50,38 +61,36 @@ a {
   text-decoration: none;
 }
 
-/* ---------- Background canvas ---------- */
+/* ---------- Background canvas (starfield — retired on the light theme) ---------- */
 .bg-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
+  display: none;
 }
 
-/* Full-page brand background (official pack) under the starfield.
-   One background per page: home=bg1 (node mesh), swap=bg2 (rings),
-   download=bg3 (keyhole tunnel), search=bg5 (orbital scan). bg4 = spare. */
+/* Per-page soft color washes (light theme). The dark pack art now lives only
+   inside dark panels (hero keyhole); the page itself stays white. */
 .site-bg {
   position: fixed;
   inset: 0;
   z-index: 0;
-  background: url('/brand/bg/bg1.jpg') center / cover no-repeat;
-  opacity: 0.5;
   pointer-events: none;
-  /* The pack art is lime — shift it onto the Solana green. */
-  filter: hue-rotate(88deg);
+  background:
+    radial-gradient(760px 420px at 14% 0%, rgba(153, 69, 255, 0.06), transparent 60%),
+    radial-gradient(820px 460px at 86% 2%, rgba(20, 241, 149, 0.08), transparent 58%);
 }
-.site-bg--bg2 { background-image: url('/brand/bg/bg2.jpg'); }
-.site-bg--bg3 { background-image: url('/brand/bg/bg3.jpg'); }
-.site-bg--bg4 { background-image: url('/brand/bg/bg4.jpg'); }
-.site-bg--bg5 { background-image: url('/brand/bg/bg5.jpg'); }
-.site-bg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 30%, rgba(6, 7, 10, 0.25), rgba(6, 7, 10, 0.92) 78%);
+.site-bg--bg2 {
+  background:
+    radial-gradient(700px 480px at 80% 8%, rgba(153, 69, 255, 0.09), transparent 60%),
+    radial-gradient(700px 420px at 12% 30%, rgba(20, 241, 149, 0.07), transparent 58%);
+}
+.site-bg--bg3 {
+  background:
+    radial-gradient(760px 440px at 50% 0%, rgba(20, 241, 149, 0.08), transparent 60%),
+    radial-gradient(680px 420px at 90% 40%, rgba(153, 69, 255, 0.06), transparent 58%);
+}
+.site-bg--bg5 {
+  background:
+    radial-gradient(720px 440px at 50% 6%, rgba(153, 69, 255, 0.07), transparent 62%),
+    radial-gradient(760px 460px at 8% 50%, rgba(20, 241, 149, 0.06), transparent 58%);
 }
 
 /* ---------- Nav ---------- */
@@ -95,8 +104,8 @@ a {
   align-items: center;
   justify-content: space-between;
   padding: 16px 28px;
-  background: rgba(6, 7, 10, 0.6);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line-soft);
 }
 
@@ -126,7 +135,7 @@ a {
   font-weight: 700;
   letter-spacing: 0.14em;
   font-size: 15px;
-  color: var(--fg);
+  color: var(--text);
 }
 
 .brand-mark {
@@ -198,7 +207,7 @@ a {
 .social:hover {
   color: var(--text);
   border-color: var(--line);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-2);
 }
 
 .social svg {
@@ -306,6 +315,15 @@ section {
   height: 560px;
 }
 
+/* The keyhole art sits in a dark rounded panel — a "portal" framed on white. */
+.hero-keyhole {
+  background: var(--dark);
+  border: 1px solid var(--line-soft);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 40px 90px -46px rgba(11, 13, 18, 0.55);
+}
+
 /* Hero art — the pack's keyhole tunnel (bg3), gently animated:
    slow ken-burns zoom + breathing glow + a ring pulsing out of the keyhole. */
 .keyhole-img {
@@ -392,9 +410,9 @@ section {
   font-family: var(--mono);
   font-size: 14px;
   color: var(--text);
-  background: transparent;
+  background: var(--white);
   border: 1px solid var(--line);
-  border-radius: 7px;
+  border-radius: 8px;
   padding: 12px 18px;
   cursor: pointer;
   transition: all 0.16s ease;
@@ -402,21 +420,42 @@ section {
 }
 
 .btn:hover {
-  border-color: rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--ink);
+  background: var(--bg-2);
 }
 
 .btn.primary {
-  background: var(--white);
-  color: #000;
-  border-color: var(--white);
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
   font-weight: 500;
 }
 
 .btn.primary:hover {
+  background: var(--accent-2);
+  border-color: var(--accent-2);
+  color: #fff;
+}
+
+/* Inside dark cards (terminal) the roles flip. */
+.terminal .btn {
+  background: transparent;
+  color: var(--dark-text);
+  border-color: var(--dark-line);
+}
+.terminal .btn:hover {
+  border-color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.05);
+}
+.terminal .btn.primary {
   background: var(--accent);
-  color: #000;
+  color: #062015;
   border-color: var(--accent);
+  font-weight: 600;
+}
+.terminal .btn.primary:hover {
+  background: #3ef5ab;
+  border-color: #3ef5ab;
 }
 
 .btn:disabled {
@@ -437,15 +476,17 @@ section {
 
 .feature {
   border: 1px solid var(--line-soft);
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 22px 20px 26px;
   background: var(--panel);
-  transition: border-color 0.18s ease, transform 0.18s ease;
+  box-shadow: 0 1px 2px rgba(11, 13, 18, 0.04);
+  transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .feature:hover {
   border-color: var(--line);
   transform: translateY(-3px);
+  box-shadow: 0 16px 40px -18px rgba(11, 13, 18, 0.18);
 }
 
 /* Pack icons on feature / product cards. */
@@ -473,7 +514,7 @@ section {
 
 .feature-n {
   font-size: 12px;
-  color: var(--accent);
+  color: var(--accent-2);
   letter-spacing: 0.1em;
 }
 
@@ -507,21 +548,23 @@ section {
   align-items: flex-start;
   gap: 0;
   border: 1px solid var(--line-soft);
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 24px 22px 22px;
   background: var(--panel);
-  transition: border-color 0.18s ease, transform 0.18s ease;
+  box-shadow: 0 1px 2px rgba(11, 13, 18, 0.04);
+  transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .product:hover {
   border-color: var(--line);
   transform: translateY(-3px);
+  box-shadow: 0 16px 40px -18px rgba(11, 13, 18, 0.18);
 }
 
 .product-cta {
   margin-top: 16px;
   font-size: 13px;
-  color: var(--accent);
+  color: var(--accent-2);
 }
 
 @media (max-width: 900px) {
@@ -555,7 +598,7 @@ section {
 .step-n {
   font-size: 26px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.16);
+  color: rgba(11, 13, 18, 0.16);
   line-height: 1;
   min-width: 46px;
 }
@@ -593,11 +636,13 @@ section {
   margin-bottom: 8px;
 }
 
+/* The terminal stays DARK on purpose — a real shell framed on the white page. */
 .terminal {
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--bg-2);
-  box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(11, 13, 18, 0.9);
+  border-radius: 14px;
+  background: var(--dark-2);
+  color: var(--dark-text);
+  box-shadow: 0 34px 80px -40px rgba(11, 13, 18, 0.5);
 }
 
 .terminal-bar {
@@ -605,9 +650,9 @@ section {
   align-items: center;
   gap: 8px;
   padding: 12px 16px;
-  border-bottom: 1px solid var(--line-soft);
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 12px 12px 0 0;
+  border-bottom: 1px solid var(--dark-line-soft);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 14px 14px 0 0;
 }
 
 .terminal-bar .dot {
@@ -620,8 +665,16 @@ section {
 .terminal-title {
   margin-left: 10px;
   font-size: 12px;
-  color: var(--muted);
+  color: var(--dark-muted);
   letter-spacing: 0.04em;
+}
+
+.terminal .muted {
+  color: var(--dark-muted);
+}
+
+.terminal .readout {
+  border-top-color: var(--dark-line-soft);
 }
 
 .terminal-body {
@@ -706,7 +759,7 @@ section {
 }
 
 .val {
-  color: var(--white);
+  color: #ffffff;
 }
 
 .warn {
@@ -766,6 +819,55 @@ section {
 
 .footer-links a:hover {
   color: var(--text);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 30px;
+  padding-bottom: 30px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.f-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.f-col a:hover {
+  color: var(--text);
+}
+
+.f-head {
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.f-tag {
+  margin: 4px 0 8px;
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 30ch;
+}
+
+.f-disclaimer {
+  font-size: 11.5px;
+  opacity: 0.8;
+}
+
+@media (max-width: 700px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
 }
 
 /* Wallet connect UI is provided by RainbowKit (themed in providers.tsx). */
@@ -921,16 +1023,18 @@ section {
   gap: 12px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: var(--bg-2);
+  background: var(--white);
+  box-shadow: 0 2px 10px rgba(11, 13, 18, 0.05);
   padding: 8px 8px 8px 18px;
 }
 
 .search-bar:focus-within {
-  border-color: rgba(20, 241, 149, 0.55);
+  border-color: rgba(153, 69, 255, 0.6);
+  box-shadow: 0 2px 14px rgba(153, 69, 255, 0.12);
 }
 
 .search-prompt {
-  color: var(--accent);
+  color: var(--accent-2);
   font-size: 18px;
 }
 
@@ -973,7 +1077,7 @@ section {
 
 .result-title {
   font-size: 16px;
-  color: #cdd9ff;
+  color: var(--accent-2);
   font-weight: 500;
   width: fit-content;
 }
@@ -984,7 +1088,7 @@ section {
 
 .result-url {
   font-size: 12.5px;
-  color: var(--green);
+  color: var(--accent-ink);
   word-break: break-all;
 }
 
@@ -1077,7 +1181,7 @@ section {
   overflow: hidden;
   border-radius: 8px;
   border: 1px solid var(--line-soft);
-  background: #0c1424;
+  background: var(--bg-2);
 }
 
 .image-cell img {
@@ -1112,7 +1216,7 @@ section {
   font-size: 13px;
   color: var(--text);
   word-break: break-all;
-  background: #05060a;
+  background: var(--bg-2);
   border: 1px solid var(--line-soft);
   border-radius: 6px;
   padding: 8px 10px;
@@ -1229,8 +1333,8 @@ section {
 
 .install-os code {
   display: block;
-  background: #05060a;
-  border: 1px solid var(--line-soft);
+  background: var(--dark);
+  border: 1px solid var(--dark-line-soft);
   border-radius: 6px;
   padding: 9px 11px;
   font-size: 12px;
@@ -1282,16 +1386,17 @@ section {
 }
 
 .swapw-card {
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-soft);
   border-radius: 16px;
-  background: var(--bg-2);
+  background: var(--white);
+  box-shadow: 0 14px 44px -22px rgba(11, 13, 18, 0.22);
   padding: 16px;
 }
 
 .swapw-row {
   border: 1px solid var(--line-soft);
   border-radius: 12px;
-  background: #05060a;
+  background: var(--bg-2);
   padding: 12px 14px;
 }
 
@@ -1321,8 +1426,8 @@ section {
 }
 
 .swapw-token {
-  background: #0e1118;
-  border: 1px solid var(--line-soft);
+  background: var(--white);
+  border: 1px solid var(--line);
   border-radius: 999px;
   color: var(--text);
   font-size: 14px;
@@ -1339,7 +1444,7 @@ section {
 }
 
 .swapw-flip button {
-  background: var(--bg-2);
+  background: var(--white);
   border: 1px solid var(--line);
   border-radius: 10px;
   color: var(--text);
@@ -1400,6 +1505,194 @@ section {
 }
 .swapw-status.err {
   color: var(--red);
+}
+
+/* ---------- Token section ---------- */
+.token {
+  padding: 30px 0 110px;
+}
+
+.token-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.token-points {
+  list-style: none;
+  margin: 22px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.token-points b {
+  color: var(--text);
+}
+
+.token-card {
+  border: 1px solid var(--line-soft);
+  border-radius: 16px;
+  background: var(--white);
+  box-shadow: 0 14px 44px -24px rgba(11, 13, 18, 0.25);
+  padding: 26px 24px;
+}
+
+.token-card .rowline {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 11px 0;
+  border-bottom: 1px dashed var(--line-soft);
+  font-size: 13.5px;
+}
+
+.token-card .rowline:last-of-type {
+  border-bottom: 0;
+}
+
+.token-card .k {
+  color: var(--muted);
+}
+
+.token-card .v {
+  color: var(--text);
+  text-align: right;
+}
+
+.token-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--accent-2);
+  border: 1px solid rgba(153, 69, 255, 0.35);
+  background: rgba(153, 69, 255, 0.06);
+  border-radius: 999px;
+  padding: 6px 12px;
+  margin-bottom: 16px;
+}
+
+/* ---------- Roadmap ---------- */
+.roadmap {
+  padding: 0 0 110px;
+}
+
+.phase-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.phase {
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  background: var(--white);
+  box-shadow: 0 1px 2px rgba(11, 13, 18, 0.04);
+  padding: 20px 18px;
+}
+
+.phase-status {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  border-radius: 999px;
+  padding: 4px 10px;
+  margin-bottom: 12px;
+  border: 1px solid var(--line-soft);
+  color: var(--muted);
+}
+
+.phase-status.live {
+  color: var(--accent-ink);
+  border-color: rgba(10, 158, 102, 0.4);
+  background: rgba(20, 241, 149, 0.1);
+}
+
+.phase-status.next {
+  color: var(--accent-2);
+  border-color: rgba(153, 69, 255, 0.35);
+  background: rgba(153, 69, 255, 0.06);
+}
+
+.phase-t {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin: 0 0 8px;
+}
+
+.phase-d {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+/* ---------- FAQ ---------- */
+.faq {
+  padding: 0 0 110px;
+}
+
+.faq-list {
+  max-width: 760px;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.faq-item summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 2px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::after {
+  content: '+';
+  color: var(--accent-2);
+  font-weight: 700;
+}
+
+.faq-item[open] summary::after {
+  content: '–';
+}
+
+.faq-item p {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 18px;
+  max-width: 65ch;
+}
+
+@media (max-width: 900px) {
+  .token-grid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .phase-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .phase-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .swapw-foot {
