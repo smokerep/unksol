@@ -3,17 +3,23 @@ import { PublicKey } from '@solana/web3.js';
 
 const DOMAIN = 'unk';
 
-/** Builds the human-readable message the user will sign in their wallet. */
+/**
+ * Builds the human-readable message the user will sign in their wallet.
+ * NOTE: deliberately NOT in the formal SIWS shape ("<domain> wants you to sign
+ * in with your Solana account:") — Phantom auto-detects that header and
+ * strictly validates the whole message against the SIWS ABNF, rejecting ours
+ * with "signature request cannot be shown due to invalid formatting".
+ * A plain text message renders fine in every wallet.
+ */
 export function buildSignInMessage(wallet: string, nonce: string, issuedAt: string): string {
   return [
-    `${DOMAIN} wants you to sign in with your Solana account:`,
-    wallet,
+    `Sign in to ${DOMAIN} — the private layer.`,
     '',
-    'Sign this message to prove you own this wallet and unlock token-gated access to the private layer.',
-    'This request will not trigger a transaction or cost any fees.',
-    '',
+    `Wallet: ${wallet}`,
     `Nonce: ${nonce}`,
     `Issued At: ${issuedAt}`,
+    '',
+    'This signature proves you own this wallet. It is free and creates no transaction.',
   ].join('\n');
 }
 
