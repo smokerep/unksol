@@ -98,7 +98,7 @@ export default function Home() {
 
       <header className="nav">
         <a className="brand" href="#top">
-          <img src="/brand/logo.svg" alt="unk" className="brand-logo-img" />
+          <img src="/brand/logo.png" alt="unk" className="brand-logo-img" />
           <span className="brand-name">unk</span>
           <span className="brand-cursor">█</span>
         </a>
@@ -230,7 +230,7 @@ export default function Home() {
         </div>
         <div className="footer-row">
           <span className="brand">
-            <img src="/brand/logo.svg" alt="" className="brand-logo-img" width={22} height={22} />
+            <img src="/brand/logo.png" alt="" className="brand-logo-img" width={22} height={22} />
             <span className="brand-name">unk</span>
           </span>
           <Socials />

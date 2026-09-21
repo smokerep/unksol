@@ -77,7 +77,7 @@ export default function SearchApp() {
   if (!hasResults) {
     return (
       <div className="engine-home">
-        <img src="/brand/logo.svg" alt="" className="engine-logo" width={64} height={64} />
+        <img src="/brand/logo.png" alt="" className="engine-logo" width={64} height={64} />
         <h1 className="engine-title">
           unk <span className="under">Search</span>
         </h1>
