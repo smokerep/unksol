@@ -1,6 +1,6 @@
 # unk — the private layer of Solana
 
-[![CI](https://github.com/giupy997/unk/actions/workflows/ci.yml/badge.svg)](https://github.com/giupy997/unk/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![CI](https://github.com/smokerep/unksol/actions/workflows/ci.yml/badge.svg)](https://github.com/smokerep/unksol/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **unk** wraps Solana in a layer of privacy: an anonymous **exit network** of WireGuard nodes, growing region by region, **private search**, an **anonymous desktop browser** and **private swaps** — all gated by the **$UNK** token (SPL token on Solana, launching via pump.fun).
 Hold the token and the layer is yours; sell below the threshold and access is revoked automatically.
