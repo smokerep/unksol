@@ -86,6 +86,10 @@ export default function AccessPanel() {
           <span className="sep">$</span> ./connect
         </p>
 
+        {!info && (
+          <p className="line muted"># gate: hold ≥ 100,000 $UNK to enter the layer</p>
+        )}
+
         {!connected && (
           <p className="line muted">
             <span className="caret">▏</span> waiting for wallet…
@@ -112,7 +116,8 @@ export default function AccessPanel() {
             </p>
             <p className="line">
               <span className="ok">✔</span> balance&nbsp;&nbsp;&nbsp;
-              <span className="val">{info.balance}</span> / {info.required} required
+              <span className="val">{info.balance.toLocaleString('en-US')}</span> /{' '}
+              {info.required.toLocaleString('en-US')} $UNK required
             </p>
             <p className="line">
               {info.eligible ? <span className="ok">✔</span> : <span className="no">✘</span>} eligible&nbsp;&nbsp;
@@ -149,7 +154,7 @@ export default function AccessPanel() {
             )}
             {!info.eligible && (
               <p className="line warn">
-                ! hold at least {info.required} tokens to unlock the network
+                ! hold at least {info.required.toLocaleString('en-US')} $UNK to unlock the network
               </p>
             )}
           </div>

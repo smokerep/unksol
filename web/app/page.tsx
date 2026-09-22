@@ -213,6 +213,7 @@ export default function Home() {
               your WireGuard configuration — pick a country, import, disappear.
             </p>
             <ul className="access-notes">
+              <li>→ access requires holding at least 100,000 $UNK</li>
               <li>→ signing costs no gas and creates no transaction</li>
               <li>→ if you sell the token, access is revoked automatically</li>
             </ul>
@@ -251,6 +252,7 @@ export default function Home() {
               <div className="rowline"><span className="k">ticker</span><span className="v">$UNK</span></div>
               <div className="rowline"><span className="k">chain</span><span className="v">Solana</span></div>
               <div className="rowline"><span className="k">launch</span><span className="v">pump.fun</span></div>
+              <div className="rowline"><span className="k">access</span><span className="v">hold ≥ 100,000 $UNK</span></div>
               <div className="rowline"><span className="k">contract</span><span className="v">revealed at launch</span></div>
               <div className="rowline"><span className="k">utility</span><span className="v">token-gated privacy layer</span></div>
             </div>
@@ -327,8 +329,8 @@ export default function Home() {
             <details className="faq-item">
               <summary>What do I need to enter?</summary>
               <p>
-                A Solana wallet (Phantom or Solflare) holding $UNK above the access
-                threshold, announced at launch. That is all.
+                A Solana wallet (Phantom or Solflare) holding at least 100,000 $UNK —
+                the access threshold. That is all.
               </p>
             </details>
             <details className="faq-item">

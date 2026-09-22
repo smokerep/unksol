@@ -96,7 +96,7 @@ export default function DownloadApp() {
             <span className="sep">$</span> auth required
           </p>
           <p className="line muted">
-            Sign in with your wallet to unlock the download. Free for $UNK holders.
+            Sign in with your wallet to unlock the download. Free for wallets holding ≥ 100,000 $UNK.
           </p>
           <div className="terminal-actions">
             <WalletMultiButton />
@@ -134,7 +134,7 @@ export default function DownloadApp() {
   if (eligible === false) {
     return (
       <div className="dl-notice">
-        <p className="line warn">! hold $UNK to unlock the download</p>
+        <p className="line warn">! hold at least 100,000 $UNK to unlock the download</p>
         <p className="muted">The unk browser is free for token holders.</p>
       </div>
     );
