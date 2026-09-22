@@ -5,6 +5,6 @@
 // user's wallet. No pool math client-side. See web/lib/swap.ts for the plan.
 module.exports = {
   SWAP_LIVE: false,
-  UNK_MINT: '', // $UNK mint — set at the stonkfun launch
+  UNK_MINT: 'EFCCHXG8ppKbpmLRm2adhCTeszYJKLNUE9ekjR5q4TL2',
   SOL_MINT: 'So11111111111111111111111111111111111111112',
 };

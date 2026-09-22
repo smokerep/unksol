@@ -9,5 +9,5 @@
 //   3) flip SWAP_LIVE to true
 export const SWAP_LIVE = false;
 
-export const UNK_MINT = ''; // $UNK mint address — set at launch
+export const UNK_MINT = 'EFCCHXG8ppKbpmLRm2adhCTeszYJKLNUE9ekjR5q4TL2';
 export const SOL_MINT = 'So11111111111111111111111111111111111111112'; // wrapped SOL

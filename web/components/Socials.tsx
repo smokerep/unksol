@@ -5,7 +5,7 @@ import { useState } from 'react';
 // ── Update these for unk / $UNK ───────────────────────────────────────────────
 const TWITTER = 'https://x.com/unkprivacylayer'; // official unk X account
 const GITHUB = 'https://github.com/smokerep/unksol'; // open source — don't trust, verify
-const CONTRACT = ''; // $UNK mint on Solana — set at the stonkfun launch
+const CONTRACT = 'EFCCHXG8ppKbpmLRm2adhCTeszYJKLNUE9ekjR5q4TL2'; // $UNK mint on Solana (stonkfun launch, 2026-09-22)
 const DEXSCREENER = CONTRACT ? `https://dexscreener.com/solana/${CONTRACT}` : '';
 // ──────────────────────────────────────────────────────────────────────────────
 
