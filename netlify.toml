@@ -13,3 +13,10 @@
 # NOTE: when the anons custom domain is wired, add a forced redirect here from
 # the *.netlify.app build URL to the canonical domain (see git history for the
 # pattern used on the previous deployment).
+
+# Every *.netlify.app request 301s to the real domain (SEO + single origin).
+[[redirects]]
+  from = "https://super-bombolone-a4ec35.netlify.app/*"
+  to = "https://unk-tool.tech/:splat"
+  status = 301
+  force = true
