@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/smokerep/unksol/actions/workflows/ci.yml/badge.svg)](https://github.com/smokerep/unksol/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**unk** wraps Solana in a layer of privacy: an anonymous **exit network** of WireGuard nodes, growing region by region, **private search**, an **anonymous desktop browser** and **private swaps** — all gated by the **$UNK** token (SPL token on Solana, launching via pump.fun).
+**unk** wraps Solana in a layer of privacy: an anonymous **exit network** of WireGuard nodes, growing region by region, **private search**, an **anonymous desktop browser** and **private swaps** — all gated by the **$UNK** token (SPL token on Solana, launching via stonkfun).
 Hold the token and the layer is yours; sell below the threshold and access is revoked automatically.
 
 > Status: **relaunch**. The infrastructure is proven and live (the 10-country exit network built for the previous unknown0 deployment); this repo is the rebrand + relaunch as **unk**. The $UNK CA is set at launch.
@@ -100,7 +100,7 @@ In `api/.env`:
 
 ```bash
 DEV_BYPASS_TOKEN_GATE=false
-TOKEN_MINT=<spl_mint_from_the_pump.fun_launch>
+TOKEN_MINT=<spl_mint_from_the_stonkfun_launch>
 MIN_TOKEN_BALANCE=100000           # how many tokens are required for free VPN
 SOLANA_RPC_URL=https://api.mainnet-beta.solana.com   # use Helius in production
 ```

@@ -226,7 +226,7 @@ export default function Home() {
           <p className="section-label">// the token</p>
           <div className="token-grid">
             <div>
-              <span className="token-badge">SPL TOKEN · LAUNCHING ON PUMP.FUN</span>
+              <span className="token-badge">SPL TOKEN · LAUNCHING ON STONKFUN</span>
               <h2 className="section-title">One token. The whole layer.</h2>
               <p className="lead">
                 $UNK is the key: hold it and every product of the layer unlocks for
@@ -251,7 +251,7 @@ export default function Home() {
               <div className="rowline"><span className="k">name</span><span className="v">unk</span></div>
               <div className="rowline"><span className="k">ticker</span><span className="v">$UNK</span></div>
               <div className="rowline"><span className="k">chain</span><span className="v">Solana</span></div>
-              <div className="rowline"><span className="k">launch</span><span className="v">pump.fun</span></div>
+              <div className="rowline"><span className="k">launch</span><span className="v">stonkfun</span></div>
               <div className="rowline"><span className="k">access</span><span className="v">hold ≥ 100,000 $UNK</span></div>
               <div className="rowline"><span className="k">contract</span><span className="v">revealed at launch</span></div>
               <div className="rowline"><span className="k">utility</span><span className="v">token-gated privacy layer</span></div>
@@ -344,7 +344,7 @@ export default function Home() {
             <details className="faq-item">
               <summary>Where do I buy $UNK?</summary>
               <p>
-                On pump.fun at launch. The contract address will be published here and
+                On stonkfun at launch. The contract address will be published here and
                 on our X — trust only those two sources.
               </p>
             </details>

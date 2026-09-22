@@ -38,7 +38,7 @@ Per country: deploy Ubuntu 24.04 → `node.sh` (prints the REGIONS_JSON entry)
 picks new countries automatically via `GET /vpn/nodes`. SearXNG: one VPS with
 `searxng.sh` (or a container on the platform).
 
-## 4. Launch $UNK (pump.fun — name "unk", ticker "unk")
+## 4. Launch $UNK (stonkfun — name "unk", ticker "unk")
 - API env: `TOKEN_MINT=<mint>`, `MIN_TOKEN_BALANCE=100000` (decided: 100k $UNK),
   `DEV_BYPASS_TOKEN_GATE=false` → restart. The gate is live.
 - `web/components/Socials.tsx` → `CONTRACT='<mint>'` (CA button + Dexscreener).
