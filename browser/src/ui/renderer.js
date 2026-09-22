@@ -10,7 +10,7 @@ const NEWTAB = 'newtab.html';
 
 // Default search engine: our own unk Search (SearXNG on the server).
 // language=en forces English results (SearXNG otherwise follows the OS locale).
-const SEARCH = 'https://search.unk.example/search?q=%s&language=en';
+const SEARCH = 'https://search.unk-tool.tech/search?q=%s&language=en';
 
 const tabs = [];
 let activeId = null;

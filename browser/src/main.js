@@ -40,8 +40,7 @@ let mainWindow = null;
 // touching the rest of the system). Pick a country; browsing exits from that node.
 // (HTTP proxy, not SOCKS5 — Chromium can't authenticate SOCKS5 proxies.)
 // Prototype: shared credentials; a real build issues them per holder.
-// TODO(launch): point at the unk API once the new domain is live.
-const API_BASE = 'https://api.unk.example';
+const API_BASE = 'https://api.unk-tool.tech';
 // Baked-in fallback used only if the API is unreachable at startup.
 // Empty until the unk fleet exists — the list is fetched from the API.
 const DEFAULT_REGIONS = [];

@@ -48,7 +48,7 @@ picks new countries automatically via `GET /vpn/nodes`. SearXNG: one VPS with
 
 ## 5. Browser release
 - Endpoints in `browser/src/main.js` (`API_BASE`, per-node creds) +
-  `renderer.js`/`newtab.html` (SEARCH) point at `*.unk.example` placeholders —
+  `renderer.js`/`newtab.html` (SEARCH) point at `*.unk-tool.tech` placeholders —
   set the real domain, bump version, build installers.
 - Re-enable CI: move `infra/ci/build-browser.yml` to `.github/workflows/`
   (needs `gh auth refresh -h github.com -s workflow` once) — installers built
