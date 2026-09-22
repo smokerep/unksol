@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 // ── Update these for unk / $UNK ───────────────────────────────────────────────
-const TWITTER = 'https://x.com/unk0vpn'; // TODO: point at the unk X handle
+const TWITTER = 'https://x.com/unkprivacylayer'; // official unk X account
 const CONTRACT = ''; // $UNK mint on Solana — set at the pump.fun launch
 const DEXSCREENER = CONTRACT ? `https://dexscreener.com/solana/${CONTRACT}` : '';
 // ──────────────────────────────────────────────────────────────────────────────
