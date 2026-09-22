@@ -9,6 +9,8 @@ on:
 
 permissions:
   contents: write # lets the workflow publish the GitHub Release
+  id-token: write # provenance attestations ("don't trust, verify")
+  attestations: write
 
 jobs:
   build:
@@ -36,6 +38,22 @@ jobs:
           # Disable code signing for now (unsigned builds are fine for testing).
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
 
+      - name: Checksums
+        shell: bash
+        run: |
+          cd browser/dist
+          (sha256sum *.dmg *.exe *.AppImage 2>/dev/null || shasum -a 256 *.dmg *.exe *.AppImage 2>/dev/null) > SHA256SUMS-${{ matrix.os }}.txt || true
+          cat SHA256SUMS-${{ matrix.os }}.txt
+
+      - name: Attest build provenance
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: |
+            browser/dist/*.dmg
+            browser/dist/*.exe
+            browser/dist/*.AppImage
+
       - uses: actions/upload-artifact@v4
         with:
           name: unk-${{ matrix.os }}
@@ -44,6 +62,7 @@ jobs:
             browser/dist/*.dmg
             browser/dist/*.exe
             browser/dist/*.AppImage
+            browser/dist/SHA256SUMS-*.txt
 
       # On a version tag, publish the installers as a GitHub Release
       # (each OS job appends its own asset to the same release).
@@ -55,3 +74,4 @@ jobs:
             browser/dist/*.dmg
             browser/dist/*.exe
             browser/dist/*.AppImage
+            browser/dist/SHA256SUMS-*.txt
