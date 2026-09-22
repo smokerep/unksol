@@ -37,10 +37,11 @@ function assertWgKey(key: string): void {
 
 export async function allocateAddress(region: Region): Promise<string> {
   const base = region.clientSubnet.split('/')[0].split('.').slice(0, 3).join('.'); // e.g. "10.8.0"
-  const peers = await prisma.vpnPeer.findMany({
-    where: { region: region.id, active: true },
-    select: { address: true },
-  });
+  // The address column is GLOBALLY unique, so the used-set must be global too:
+  // a stale row from another region (or a legacy subnet overlap) would
+  // otherwise collide forever. Revoked peers free their IP by rewriting the
+  // address to a "freed:" marker, which never matches a real IP here.
+  const peers = await prisma.vpnPeer.findMany({ select: { address: true } });
   const used = new Set(peers.map((p) => p.address.split('/')[0]));
 
   for (let host = 2; host <= 254; host++) {
