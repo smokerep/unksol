@@ -133,8 +133,7 @@ export default function Home() {
               <a className="btn" href="#how">how it works →</a>
             </div>
             <p className="statusline">
-              <span className="blink">●</span> layer: boot sequence — first exit regions coming
-              online &nbsp;·&nbsp; logs: 0
+              <span className="blink">●</span> layer: 3 exit regions live — 🇫🇷 🇵🇱 🇦🇺 &nbsp;·&nbsp; logs: 0
             </p>
           </div>
 
