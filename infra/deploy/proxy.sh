@@ -8,8 +8,8 @@ set -euo pipefail
 [ "$(id -u)" = "0" ] || { echo "Run as root."; exit 1; }
 
 PORT="${PROXY_PORT:-8888}"
-PROXY_USER="${PROXY_USER:-unknown0}"
-PROXY_PASS="${PROXY_PASS:-unknown0-beta}"
+PROXY_USER="${PROXY_USER:-unk}"
+PROXY_PASS="${PROXY_PASS:-unk-beta}"
 
 # Drop the previous SOCKS5 container if it's still around.
 docker rm -f unk-proxy >/dev/null 2>&1 || true
