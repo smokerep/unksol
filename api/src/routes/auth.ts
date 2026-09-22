@@ -9,7 +9,9 @@ const walletSchema = z.string().regex(/^[1-9A-HJ-NP-Za-km-z]{32,44}$/, 'invalid 
 
 export async function authRoutes(app: FastifyInstance): Promise<void> {
   // 1) The client requests a nonce to sign.
-  app.post('/auth/nonce', async (req) => {
+  const strict = (max: number) => ({ config: { rateLimit: { max, timeWindow: '1 minute' } } });
+
+  app.post('/auth/nonce', strict(10), async (req) => {
     const { wallet } = z.object({ wallet: walletSchema }).parse(req.body);
 
     // Opportunistic cleanup so expired nonces don't pile up forever.
@@ -25,7 +27,7 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
   });
 
   // 2) The client sends the signed message; we verify it and issue a session (JWT).
-  app.post('/auth/verify', async (req, reply) => {
+  app.post('/auth/verify', strict(15), async (req, reply) => {
     const { wallet, message, signature } = z
       .object({ wallet: walletSchema, message: z.string().max(2000), signature: z.string().max(500) })
       .parse(req.body);

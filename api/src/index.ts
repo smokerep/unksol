@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import { ZodError } from 'zod';
 import cors from '@fastify/cors';
+import rateLimit from '@fastify/rate-limit';
 import jwt from '@fastify/jwt';
 import { config } from './config';
 import { authRoutes } from './routes/auth';
@@ -15,7 +16,9 @@ async function main(): Promise<void> {
     throw new Error('JWT_SECRET must be set in production');
   }
 
-  const app = Fastify({ logger: true });
+  // trustProxy: Railway/Netlify sit in front — rate limits must key on the
+  // real client IP, not the load balancer's.
+  const app = Fastify({ logger: true, trustProxy: true });
 
   // Accept body-less POSTs even when content-type is application/json
   // (e.g. /access/provision, /access/revoke have no body).
@@ -43,6 +46,7 @@ async function main(): Promise<void> {
   const corsOrigin =
     config.corsOrigin.length === 1 && config.corsOrigin[0] === '*' ? true : config.corsOrigin;
   await app.register(cors, { origin: corsOrigin, credentials: true });
+  await app.register(rateLimit, { max: 120, timeWindow: '1 minute' });
   await app.register(jwt, { secret: config.jwtSecret, sign: { expiresIn: config.jwtTtl } });
 
   app.get('/health', async () => ({ ok: true, env: config.nodeEnv }));
